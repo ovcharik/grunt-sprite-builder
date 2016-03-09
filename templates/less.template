@@ -1,0 +1,9 @@
+{{#files}}
+{{#sprites}}
+@{{name}}_f: "./{{{dest}}}";
+@{{name}}_w: {{width}}px;
+@{{name}}_h: {{height}}px;
+@{{name}}_x: -{{offsetX}}px;
+@{{name}}_y: -{{offsetY}}px;
+{{/sprites}}
+{{/files}}

@@ -1,0 +1,14 @@
+{
+  {{#files}}
+  "./{{{dest}}}": {
+    {{#sprites}}
+    "{{{name}}}": {
+      "w" : {{width}},
+      "h" : {{height}},
+      "x" : {{offsetX}},
+      "y" : {{offsetY}}
+    }{{^isLastSprite}},{{/isLastSprite}}
+    {{/sprites}}
+  }{{^isLastFile}},{{/isLastFile}}
+  {{/files}}
+}
