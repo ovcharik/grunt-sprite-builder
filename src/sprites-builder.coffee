@@ -17,7 +17,7 @@ spritesFolderHash = (src) ->
   for file in files
     p = path.join src, file
     s = fs.statSync p
-    buffer += "#{p}#{s.mtime.valueOf()}#{s.size}"
+    buffer += "#{slash(p)}#{s.mtime.valueOf()}#{s.size}"
   md5(buffer)
 
 writeTemplate = (input, output, data) ->

@@ -31,7 +31,7 @@
       file = files[k];
       p = path.join(src, file);
       s = fs.statSync(p);
-      buffer += "" + p + (s.mtime.valueOf()) + s.size;
+      buffer += "" + (slash(p)) + (s.mtime.valueOf()) + s.size;
     }
     return md5(buffer);
   };
