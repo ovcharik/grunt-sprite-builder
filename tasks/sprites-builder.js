@@ -20,7 +20,8 @@
 
   defaultTemplates = {
     'json': path.resolve(__dirname, '..', 'templates', 'json.template'),
-    'less': path.resolve(__dirname, '..', 'templates', 'less.template')
+    'less': path.resolve(__dirname, '..', 'templates', 'less.template'),
+    'anim': path.resolve(__dirname, '..', 'templates', 'anim.template')
   };
 
   spritesFolderHash = function(src) {
@@ -36,12 +37,13 @@
     return md5(buffer);
   };
 
-  writeTemplate = function(input, output, data) {
+  writeTemplate = function(input, output, data, grunt) {
     var ref, result, template, templatePath;
     templatePath = (ref = defaultTemplates[input]) != null ? ref : input;
     template = fs.readFileSync(templatePath, 'utf8');
     result = Mustache.render(template, data);
-    return fs.writeFileSync(output, result, 'utf8');
+    fs.writeFileSync(output, result, 'utf8');
+    return grunt.log.writeln("created: " + output);
   };
 
   module.exports = function(grunt) {
@@ -49,6 +51,7 @@
       var cacheData, dest, done, e, error1, error2, file, fn, folder, folders, k, l, len, len1, oldSprites, options, process, ref, results;
       done = this.async();
       options = this.options({
+        method: 'growing',
         padding: 0,
         trim: false,
         templates: {},
@@ -94,6 +97,7 @@
             return build.processOne(folder, {
               dest: name,
               padding: options.padding,
+              method: options.method,
               trim: options.trim,
               templates: {}
             }, function(error, result) {
@@ -101,6 +105,7 @@
                 return cb(error);
               }
               results[name] = result;
+              results[name].basename = basename;
               grunt.log.writeln("created: " + name);
               return cb(null);
             });
@@ -136,6 +141,8 @@
           file = results[fkey];
           file.dest = slash(file.dest);
           file.isLastFile = i === (fkeys.length - 1);
+          file.name = fkey;
+          file.spritesLength = file.sprites.length;
           data.files.push(file);
           file.sprites = _(file.sprites).sortBy('name');
           _(file.sprites).each(function(s, j) {
@@ -147,7 +154,7 @@
         for (name in ref1) {
           out = ref1[name];
           try {
-            writeTemplate(name, out, data);
+            writeTemplate(name, out, data, grunt);
           } catch (error3) {
             e = error3;
             grunt.log.writeln(e);

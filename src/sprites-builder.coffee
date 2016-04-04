@@ -10,6 +10,7 @@ Mustache = require 'mustache'
 defaultTemplates =
   'json': path.resolve __dirname, '..', 'templates', 'json.template'
   'less': path.resolve __dirname, '..', 'templates', 'less.template'
+  'anim': path.resolve __dirname, '..', 'templates', 'anim.template'
 
 spritesFolderHash = (src) ->
   buffer = ""
@@ -20,17 +21,19 @@ spritesFolderHash = (src) ->
     buffer += "#{slash(p)}#{s.mtime.valueOf()}#{s.size}"
   md5(buffer)
 
-writeTemplate = (input, output, data) ->
+writeTemplate = (input, output, data, grunt) ->
   templatePath = defaultTemplates[input] ? input
   template = fs.readFileSync templatePath, 'utf8'
   result = Mustache.render template, data
   fs.writeFileSync output, result, 'utf8'
+  grunt.log.writeln "created: #{output}"
 
 module.exports = (grunt) ->
   grunt.registerMultiTask 'spriteBuilder', 'Make sprite atlases', ->
     done = @async()
 
     options = @options
+      method   : 'growing'
       padding  : 0
       trim     : false
       templates: {}
@@ -67,9 +70,10 @@ module.exports = (grunt) ->
           results[name] = cacheData[name]
         else
           process.push (cb) ->
-            build.processOne folder, { dest: name, padding: options.padding, trim: options.trim, templates: {} }, (error, result) ->
+            build.processOne folder, { dest: name, padding: options.padding, method: options.method, trim: options.trim, templates: {} }, (error, result) ->
               return cb(error) if error
               results[name] = result
+              results[name].basename = basename
               grunt.log.writeln "created: #{name}"
               cb(null)
 
@@ -91,6 +95,8 @@ module.exports = (grunt) ->
         file = results[fkey]
         file.dest = slash(file.dest)
         file.isLastFile = i == (fkeys.length - 1)
+        file.name = fkey
+        file.spritesLength = file.sprites.length
         data.files.push file
         file.sprites = _(file.sprites).sortBy('name')
         _(file.sprites).each (s, j) ->
@@ -99,7 +105,7 @@ module.exports = (grunt) ->
 
       for name, out of options.templates
         try
-          writeTemplate name, out, data
+          writeTemplate name, out, data, grunt
         catch e
           grunt.log.writeln e
 

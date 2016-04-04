@@ -1,0 +1,7 @@
+{{#files}}
+@{{basename}}_url: "./{{{dest}}}";
+@{{basename}}_frames: {{spritesLength}};
+@{{basename}}_frame_w: {{sprites.0.width}}px;
+@{{basename}}_frame_h: {{sprites.0.height}}px;
+
+{{/files}}
