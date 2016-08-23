@@ -39,6 +39,7 @@ module.exports = (grunt) ->
       templates: {}
       cache    : true
       cacheFile: ".sprite-builder-cache.json"
+      filter   : /\.png$/i
     dest = @data.dest
 
     folders = []
@@ -70,7 +71,7 @@ module.exports = (grunt) ->
           results[name] = cacheData[name]
         else
           process.push (cb) ->
-            build.processOne folder, { dest: name, padding: options.padding, method: options.method, trim: options.trim, templates: {} }, (error, result) ->
+            build.processOne folder, { dest: name, padding: options.padding, method: options.method, trim: options.trim, templates: {}, filter: options.filter }, (error, result) ->
               return cb(error) if error
               results[name] = result
               results[name].basename = basename

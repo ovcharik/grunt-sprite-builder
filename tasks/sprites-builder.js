@@ -56,7 +56,8 @@
         trim: false,
         templates: {},
         cache: true,
-        cacheFile: ".sprite-builder-cache.json"
+        cacheFile: ".sprite-builder-cache.json",
+        filter: /\.png$/i
       });
       dest = this.data.dest;
       folders = [];
@@ -99,7 +100,8 @@
               padding: options.padding,
               method: options.method,
               trim: options.trim,
-              templates: {}
+              templates: {},
+              filter: options.filter
             }, function(error, result) {
               if (error) {
                 return cb(error);
