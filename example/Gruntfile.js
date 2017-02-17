@@ -6,8 +6,9 @@ module.exports = function(grunt) {
       growing: {
         options: {
           method   : 'growing',
-          cache    : false,
           hashname : false,
+          cache    : true,
+          cacheFile: '.growing-cache.json',
           templates: {
             json: './result/growing-json.json',
             less: './result/growing-less.less'
@@ -20,8 +21,9 @@ module.exports = function(grunt) {
         options: {
           method   : 'horizontal',
           trim     : false,
-          cache    : false,
           hashname : false,
+          cache    : true,
+          cacheFile: '.horizontal-cache.json',
           templates: {
             anim: './result/horizontal-anim.less'
           }
