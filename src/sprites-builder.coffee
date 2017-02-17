@@ -29,17 +29,18 @@ writeTemplate = (input, output, data, grunt) ->
   grunt.log.writeln "created: #{output}"
 
 module.exports = (grunt) ->
-  grunt.registerMultiTask 'spriteBuilder', 'Make sprite atlases', ->
+  spriteBuilderMultiTask = ->
     done = @async()
 
     options = @options
       method   : 'growing'
       padding  : 0
-      trim     : false
-      templates: {}
+      trim     : true
+      hashname : true
       cache    : true
       cacheFile: ".sprite-builder-cache.json"
       filter   : /\.png$/i
+      templates: {}
     dest = @data.dest
 
     folders = []
@@ -50,7 +51,7 @@ module.exports = (grunt) ->
       oldSprites = fs.readdirSync(dest).map (file) ->
         path.join dest, file
     catch e
-      console.log e
+      grunt.log.error e
       oldSprites = []
     if options.cache
       try
@@ -66,7 +67,10 @@ module.exports = (grunt) ->
     for folder in folders
       do (folder) ->
         basename = path.basename folder
-        name = path.join dest, "#{basename}-#{spritesFolderHash(folder)}.png"
+        if options.hashname
+          name = path.join dest, "#{basename}-#{spritesFolderHash(folder)}.png"
+        else
+          name = path.join dest, "#{basename}.png"
         if _(oldSprites).include(name) and cacheData[name]
           results[name] = cacheData[name]
         else
@@ -111,6 +115,9 @@ module.exports = (grunt) ->
           grunt.log.writeln e
 
       if options.cache
-        fs.writeFileSync options.cacheFile, JSON.stringify(results), 'utf8'
+        fs.writeFileSync options.cacheFile, JSON.stringify(results, null, 2), 'utf8'
 
       return done(true)
+
+  grunt.registerMultiTask 'spriteBuilder' , 'Make sprite atlases', spriteBuilderMultiTask
+  grunt.registerMultiTask 'sprite-builder', 'Make sprite atlases', spriteBuilderMultiTask

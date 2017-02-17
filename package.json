@@ -4,7 +4,8 @@
   "description": "",
   "main": "tasks/sprites-builder",
   "scripts": {
-    "build": "coffee -c -o tasks src"
+    "build-task": "coffee -c -o tasks src",
+    "build-example": "cd example && npm run build"
   },
   "keywords": [],
   "author": "",

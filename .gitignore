@@ -1,3 +1,7 @@
 npm-debug.log
 node_modules/
 test/
+
+example/npm-debug.log
+example/node_modules/
+example/.sprite-builder-cache.json
