@@ -1,7 +1,7 @@
 {
   "name": "grunt-sprite-builder",
   "version": "1.0.2",
-  "description": "",
+  "description": "Spritesheet packer task for Grunt",
   "main": "tasks/sprites-builder",
   "scripts": {
     "build-task": "coffee -c -o tasks src",
