@@ -1,6 +1,6 @@
 {
   "name": "grunt-sprite-builder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Spritesheet packer task for Grunt",
   "main": "tasks/sprites-builder",
   "scripts": {
